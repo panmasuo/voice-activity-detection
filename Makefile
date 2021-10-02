@@ -5,17 +5,16 @@ LIBS=-lpthread -lasound -lm -lrt -lpaho-mqtt3c
 SRC=$(wildcard src/*.c)
 OBJ=$(SRC:.c=.o)
 
-# OBJ=main.o fft.o vad_moatt.o pcm_capture.o
+default: all
 
-# default: all
+.PHONY: all
 
-.PHONY: run
-
-run: $(OBJ)
+all: $(OBJ)
+	mkdir obj/
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 	mv src/*.o obj/
 
 .PHONY: clean
 
 clean:
-	rm -f obj/*.o run
+	rm -f obj/*.o all

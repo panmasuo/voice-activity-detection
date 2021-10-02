@@ -35,7 +35,7 @@ void sig_handler(int signum)
 
 int init_mutexes()
 {
-    pthread_mutexattr_t mx_sync1_attr;
+    printf("co?");
     pthread_mutexattr_t signal_buffer_lock_attr;
 
     sem_init(&sx_vadLock1, MAX_SEM_COUNT, 0);

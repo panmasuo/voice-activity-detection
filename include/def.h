@@ -1,12 +1,14 @@
 /* file for project defines and includes */
 #ifndef DEF_H_
 #define DEF_H_
-// #include <stdio.h>
-// #include <stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <pthread.h>		// -lpthread
-// #include <math.h>		   	// -lm
+#include <math.h>		   	// -lm
 #include <semaphore.h>
+#include "fft.h"
 
 
 #define SUCCESS 0

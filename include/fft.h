@@ -2,6 +2,7 @@
 #define FFT_H_
 
 #include <complex.h>
+#include <stdio.h>
 
 typedef double complex cplx;
 

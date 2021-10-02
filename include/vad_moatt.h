@@ -1,6 +1,6 @@
-#include "def.h"
-#include "out.h"
 #include <complex.h>
+
+#include "def.h"
 
 #ifndef VAD_MOATT_H_
 #define VAD_MOATT_H_
