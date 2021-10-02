@@ -25,7 +25,7 @@
 #define FFT_STEP        (SAMPLING_RATE/FFT_POINTS)
 #define NUM_OF_FRAMES   (FRAME_SIZE*SAMPLING_RATE) * 10000
 
-#define DELAY           10000       // us
+//#define DELAY           10000       // us
 
 typedef double complex cplx;
 pthread_mutex_t mx_sync1, mx_sync2;
