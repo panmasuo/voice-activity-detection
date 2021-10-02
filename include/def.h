@@ -1,21 +1,16 @@
 /* file for project defines and includes */
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>     //TODO, refactor this into ifdefs
+#ifndef DEF_H_
+#define DEF_H_
+// #include <stdio.h>
+// #include <stdlib.h>
+#include <time.h>
 #include <pthread.h>		// -lpthread
-#include <math.h>		   	// -lm
+// #include <math.h>		   	// -lm
 #include <semaphore.h>
-#include <complex.h>
 
-#ifndef PCM_CAPTURE_H_
-#define PCM_CAPTURE_H_
 
-/* Defines OPTIONS */
-
-// #define FILES
-// #define PRINT
-// #define MQTT
-// #define LEDBLINK
+#define SUCCESS 0
+#define FAILURE 1
 
 #define ALSA_PCM_NEW_HW_PARAMS_API
 #define FRAME_SIZE      0.01         // ms
@@ -27,20 +22,12 @@
 
 #define DELAY           10000       // us
 
-typedef double complex cplx;
-pthread_mutex_t mx_sync1, mx_sync2;
+pthread_mutex_t mx_sync1, signal_buffer_lock;
 sem_t sx_vadLock1, sx_vadLock2;
 short *real_buffer;   // global variable for acquired pcm signal
 
 /* time calculating */
 double total_time;
 clock_t start, end;
-
-#ifdef FILES
-FILE *fFeatures;
-FILE *fSignal;
-FILE *fSpectrum;
-FILE *fVad;
-#endif // FILES
 
 #endif

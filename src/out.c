@@ -1,10 +1,8 @@
 #include "def.h"
-#include "mqtt.h"
-#ifdef LEDBLINK
-#define LedPin 0
-#endif
+#include "out.h"
+#include <mqueue.h>	    // -lrt
+#include <string.h>
 
-MQTTClient client;
 mqd_t mq_read;
 
 void *mqtt_pub_thrd() {
@@ -28,18 +26,9 @@ void *mqtt_pub_thrd() {
 		perror("Error opening");
 	}
 
-	/* setup led blinking */
-	#ifdef LEDBLINK
-	if(wiringPiSetup() == -1) { //when initialize wiringPi failed, print message to screen
-					printf("setup wiringPi failed !\n");
-					return -1;
-	}
-	pinMode(LedPin, OUTPUT);
-	#endif
-
 	while(1) {
 		rc = mq_receive(mq_read, buffer, MSG_SIZE, NULL);	// blocking until mq is not empty
-		if(rc < 1) {
+		if (rc < 1) {
 			perror("Error receiving");
 		}
 		pubmsg.payload = buffer;					// sending string
@@ -53,16 +42,5 @@ void *mqtt_pub_thrd() {
 		rc = MQTTClient_waitForCompletion(client, token, TIMEOUT);
 		printf("\ttoken%d delivered\n", token);
 		fflush(stdout);
-
-		#ifdef LEDBLINK
-		if (buffer[0] == 1) {
-			digitalWrite(LedPin, LOW);
-		} else if (buffer[0] == 0) {
-			digitalWrite(LedPin, HIGH);
-		} else {
-			printf("Błąd w buforze\n");
-		}
-		#endif
-
 	}
 }

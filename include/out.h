@@ -1,10 +1,5 @@
 #include "def.h"
-#include <string.h>
-#include <mqueue.h>	    // -lrt
 #include "MQTTClient.h" // -lpaho-mqtt3c
-#ifdef LEDBLINK
-#include <wiringPi.h>
-#endif
 
 #ifndef MQTT_H_
 #define MQTT_H_
@@ -17,6 +12,6 @@
 #define TIMEOUT     10000L
 #define MSG_SIZE    2
 
-struct mq_attr attr;
+MQTTClient client;
 
 #endif
