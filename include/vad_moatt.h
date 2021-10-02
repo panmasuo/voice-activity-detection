@@ -17,6 +17,6 @@ typedef double complex cplx;
 float calculate_energy(short *signal);
 float calculate_dominant(cplx *spectrum);
 float calculate_sfm(cplx *spectrum);
-void *vad_thrd();
+void *vad_thrd(void);
 
 #endif
