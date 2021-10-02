@@ -151,10 +151,10 @@ fVad = fopen("files/Vad.csv", "w");
 			for(j = 0; j < FFT_POINTS; j++) {
 				fprintf(fSignal,"%hi\n", real_buffer[j]);
 				if(j < FFT_POINTS - 1) {
-					fprintf(fSpectrum,"%f,", cabsf(fft_signal[i]/FFT_POINTS)*2);
+					fprintf(fSpectrum,"%f,", cabsf(fft_signal[j]/FFT_POINTS)*2);
 				}
 				else if(j == FFT_POINTS - 1) {
-					fprintf(fSpectrum,"%f\n", cabsf(fft_signal[i]/FFT_POINTS)*2);
+					fprintf(fSpectrum,"%f\n", cabsf(fft_signal[j]/FFT_POINTS)*2);
 				}
 			}
 			#endif
