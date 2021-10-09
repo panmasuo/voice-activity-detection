@@ -4,12 +4,16 @@
 
 #define SPEECH_RUN_MIN_FRAMES   5
 #define SILENCE_RUN_MIN_FRAMES  10
-#define SILENCE 0
-#define SPEECH  1
 #define TRUE 1
 #define FALSE 0
 
 extern short *real_buffer; // global variable for acquired pcm signal
+
+typedef enum vad_decision {
+    DECISION_SILENCE = 0,
+    DECISION_SPEECH = 1,
+    DECISION_UNDEFINED = 255 // find better name
+} vad_decision_t;
 
 /* local variables */
 typedef struct {
@@ -25,13 +29,15 @@ typedef struct {
 } vad_t;
 
 /* static functions prototypes */
-static void  calculate_fft(cplx *fft_signal);
+static void calculate_fft(cplx *fft_signal);
 static float calculate_energy(short *signal);
 static float calculate_dominant(cplx *spectrum);
 static float calculate_sfm(cplx *spectrum);
-static void  set_minimum_feature(features_t *minimum, features_t *current, int i);
-static int   calculate_counter(features_t *minimum, features_t *current, features_t *threshold);
-static void  calculate_decision(vad_t *state, int counter);
+static void set_minimum_feature(features_t *minimum, features_t *current, int i);
+static int calculate_counter(features_t *minimum, features_t *current, features_t *threshold);
+static void calculate_decision(vad_t *state, int counter);
+static void initialize_primary_thresholds(features_t *primary);
+static void initialize_current_thresholds(features_t *current, features_t *primary)
 
 /* static functions declarations */
 static void calculate_fft(cplx *fft_signal)
@@ -170,9 +176,22 @@ static void calculate_decision(vad_t *state, int counter)
     }
 }
 
+static void initialize_primary_thresholds(features_t *primary)
+{
+    primary->energy = 40;
+    primary->F = 185;
+    primary->SFM = 5;
+}
+
+static void initialize_current_thresholds(features_t *current, features_t *primary)
+{
+    current->F = primary->F;
+    current->SFM = primary->SFM;
+}
+
 void *vad_moatt_thrd()
 {
-    int i;
+    // int i;
     int counter;
 
     vad_t state;
@@ -187,16 +206,13 @@ void *vad_moatt_thrd()
     fft_signal = (cplx *)malloc(sizeof(cplx) * FFT_POINTS);
 
     /* based on Moatt */
-    primThresh.energy = 40;
-    primThresh.F = 185;
-    primThresh.SFM = 5;
+    initialize_primary_thresholds(&primThresh);
 
     /* initial VAD decision */
-    currThresh.F = primThresh.F; // moved from 3-4 for opt
-    currThresh.SFM = primThresh.SFM;
+    initialize_current_thresholds(&currThresh, &primThresh); // moved from 3-4 for opt
 
     while (1) {
-        for (i = 0; i < NUM_OF_FRAMES; i++) {
+        for (int i = 0; i < NUM_OF_FRAMES; i++) {
             sem_wait(&sx_vadLock1);
             printf("halo\r\n");
             pthread_mutex_lock(&signal_buffer_lock);
@@ -222,7 +238,7 @@ void *vad_moatt_thrd()
             calculate_decision(&state, counter);
 
             /* 3-7, 3-8: update minimum energy */
-            if (state.decision == SILENCE) {
+            if (state.decision == DECISION_SILENCE) {
                 minFeat.energy = ((state.silence_run * minFeat.energy) + curFeat.energy) / (state.silence_run + 1);
             }
             currThresh.energy = primThresh.energy * log10f(minFeat.energy);
