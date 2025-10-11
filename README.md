@@ -1,6 +1,7 @@
 # VAD algorithm implemented using ALSA library in C programming language
 
-Voice Activity Detection (VAD) algorithm made based on Moattar and Homayounpour's publication [A simple but efficient real-time voice activity detection algorithm](https://www.researchgate.net/publication/255667085_A_simple_but_efficient_real-time_voice_activity_detection_algorithm).
+Voice Activity Detection (VAD) algorithm made based on Moattar and Homayounpour's publication
+[A simple but efficient real-time voice activity detection algorithm](https://www.researchgate.net/publication/255667085_A_simple_but_efficient_real-time_voice_activity_detection_algorithm).
 
 Code is written in C language using:
 

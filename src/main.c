@@ -34,9 +34,9 @@ int main()
 
     struct application_attributes attrs;
 
-    if (init_mutexes(&attrs) == STATUS_FAILURE) {
+    if (STATUS_FAILURE == init_mutexes(&attrs)) {
         printf("Initialization failed\r\n");
-        exit(1);
+        exit(STATUS_FAILURE);
     }
 
     // TODO does it need to be casted to void?
@@ -46,5 +46,5 @@ int main()
     pthread_join(pcm_sampling_hndl, NULL);
     pthread_join(vad_hndl, NULL);
 
-    return 0;
+    return STATUS_SUCCESS;
 }

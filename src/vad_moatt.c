@@ -1,10 +1,8 @@
 /* VAD algorithm file */
+#include <math.h>
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include <semaphore.h>
-
-#include <math.h>
 
 #include "config.h"
 #include "fft.h"
@@ -13,18 +11,16 @@
 #define SPEECH_RUN_MIN_FRAMES   4
 #define SILENCE_RUN_MIN_FRAMES  10
 
-#define FRAME_SIZE      0.01         // ms
+#define FRAME_SIZE_MS   0.01
 #define FFT_POINTS      NUMBER_OF_SAMPLES
 #define FFT_STEP        (SAMPLING_RATE / FFT_POINTS)
-// #define NUM_OF_FRAMES   (FRAME_SIZE * SAMPLING_RATE)
-#define NUM_OF_FRAMES   (FRAME_SIZE * SAMPLING_RATE)
+#define NUM_OF_FRAMES   (FRAME_SIZE_MS * SAMPLING_RATE)
 
 typedef enum {
     DECISION_SILENCE = 0,
     DECISION_SPEECH = 1
 } vad_decision;
 
-/* local variables */
 typedef struct {
     float energy;
     float F;
@@ -73,6 +69,7 @@ void initialize_current_thresholds(features *current, features *primary)
 void calculate_fft(short *real_buffer, cplx *fft_signal)
 {
     for (int i = 0; i < FFT_POINTS; i++) {
+        // zero out the imaginary part
         fft_signal[i] = (real_buffer[i] + 0.0f * _Complex_I);
     }
 
@@ -241,7 +238,7 @@ void *vad_moatt_thrd(void *args)
             /* 3-3 calculate minimum value for first 30 frames */
             set_minimum_feature(&minimum, &current, i);
 
-            /* 3-4 set thresholds, only energy threashold is changing */
+            /* 3-4 set thresholds, only energy threshold is changing */
             current_threshold.energy = primary_threshold.energy * log10f(minimum.energy);
 
             /* 3-5 calculate counter */
