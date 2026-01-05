@@ -1,3 +1,2 @@
-obj/*.o
-files/
-run
+.vscode/
+build/
