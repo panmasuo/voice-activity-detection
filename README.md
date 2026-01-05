@@ -5,7 +5,7 @@ Voice Activity Detection (VAD) algorithm made based on Moattar and Homayounpour'
 
 Code is written in C language using:
 
-- `ALSA` (for sound proccesing)
+- `ALSA` (for sound processing)
 - `pthreads` (for multithreading)
 
 ## Building
@@ -40,3 +40,4 @@ or your own:
 ```bash
 ./build/vad
 ```
+

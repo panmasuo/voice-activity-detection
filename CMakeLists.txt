@@ -17,3 +17,4 @@ find_library(MATH_LIBRARY m)
 
 add_executable(vad ${SOURCES})
 target_link_libraries(vad ${ALSA_LIBRARIES} ${MATH_LIBRARY})
+
